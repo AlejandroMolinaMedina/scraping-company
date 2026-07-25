@@ -1,0 +1,51 @@
+{% extends 'templateBaseLogin.html'%}
+
+{% block form %}
+<div class="row d-flex align-items-center">
+    <h1 class="align-items-start">Crear cuenta</h1>
+    <div class="col-12 mx-auto">
+        <form method="POST" action="{{url_for('registrarUsuario')}}">
+            {{ form.csrf_token }}
+            <div class="row justify-content-center m-1">
+                {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                <div class="alert alert-danger col-md-4" role="alert">
+                    {% for message in messages %}
+                    {{ message }}
+                    {% endfor %}
+                </div>
+                {% endif %}
+                {% endwith %}
+                <div class="col-12 fondoregistro row">
+                    <div class="form-group mt-3 col-12 col-md-6">
+                        {{form.correo.label(class='label-asterisk')}}
+                        {{form.correo(class='form-control', placeholder='Correo electrónico')|safe}}
+                    </div>
+                    <div class="form-group mt-3 col-12 col-md-6">
+                        {{form.contraseña.label(class='label-asterisk')}}
+                        {{form.contraseña(class='form-control', placeholder='Contraseña')|safe}}
+                    </div>
+                    <div class="form-group mt-3 col-12 col-md-6">
+                        {{form.confirm_contraseña.label(class='label-asterisk')}}
+                        {{form.confirm_contraseña(class='form-control', placeholder='Confirmar Contraseña')|safe}}
+                    </div>
+                    <!-- Resto del formulario -->
+                    {% for field in form if field.errors %}
+                        <div class="alert alert-danger mt-2" role="alert">
+                            {% for error in field.errors %}
+                            {{ error }}
+                            {% endfor %}
+                        </div>
+                    {% endfor %}
+
+                    <!-- Resto del formulario -->
+
+                    <div class="form-group my-3">
+                        {{ form.submit(class='btn btn-primary buttonColor') | safe }}
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

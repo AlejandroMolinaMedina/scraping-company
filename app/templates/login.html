@@ -1,0 +1,47 @@
+{% extends 'templateBaseLogin.html'%}
+
+{% block form %}
+
+
+<div class="row d-flex align-items-center">
+    <h1 class="align-items-start">Iniciar sesión</h1>
+    <div class="col-12 mx-auto">
+        <form method="POST" action="{{url_for('login')}}">
+            {{ form.csrf_token }}
+            <div class="row justify-content-center m-1">
+                <!-- Agregamos justify-content-center para centrar horizontalmente -->
+                <div class="col-md-12 fondologin">
+                    <div class="form-group mt-3">
+                        {{ form.correo.label(class='label-asterisk') | safe }}
+                        {{ form.correo(class='form-control', id='email', placeholder='Correo electrónico') | safe }}
+                        {% if form.correo.errors %}
+                        <div class="alert alert-danger" role="alert">
+                            {% for error in form.correo.errors %}
+                            {{ error }}
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="form-group mt-3">
+                        {{ form.contraseña.label(class='label-asterisk') | safe }}
+                        {{ form.contraseña(class='form-control', placeholder='Contraseña') | safe }}
+                    </div>
+                    {% with messages = get_flashed_messages() %}
+                    {% if messages %}
+                    <div class="alert alert-danger my-3" role="alert">
+                        {% for message in messages %}
+                        {{ message }}
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                    {% endwith %}
+                    <div class="form-group my-3">
+                        {{ form.submit(class='btn btn-primary buttonColor') | safe }}
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

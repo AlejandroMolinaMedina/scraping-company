@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Generar Enlace Público</title>
+</head>
+<body>
+    <h1>Generar Enlace Público</h1>
+    <form method="POST" action="{{ url_for('generar_url') }}">
+        <label for="informe_id">ID del Informe:</label>
+        <input type="text" name="informe_id" required>
+        <button type="submit">Generar Enlace</button>
+    </form>
+    {% if enlace_publico %}
+        <p>Enlace público: <a href="{{ enlace_publico }}" target="_blank">{{ enlace_publico }}</a></p>
+    {% endif %}
+</body>
+</html>

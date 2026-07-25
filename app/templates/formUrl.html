@@ -1,0 +1,81 @@
+{% extends 'templateBase.html' %}
+
+{% block form %}
+<div class="row d-flex align-items-center ms-lg-5">
+    <div class="col-12 mx-auto d-flex align-items-center justify-content-center ms-lg-5">
+        <form id="myForm" method="POST" action="/">
+            <div class="row ms-lg-5">
+                <div class="col-11 row">
+                    <div class="col-12 text-center">
+                        <h2>Descubre las tecnologías que utiliza tu web</h2>
+                    </div>
+                    <div class="form-group d-flex align-items-center justify-content-center row">
+                        <div class="col-10 m-0 p-0">
+                            <input class="form-control form-control-lg" id="url" name="url" type="text"
+                                placeholder="URL de la página" />
+                        </div>
+                        <div class="col-2 m-0 p-0">
+                            <button id="submitButton" class="btn btn-primary btn-lg buttonColor" type="button"
+                                onclick="submitForm()">ANALIZAR</button>
+                        </div>
+                        {% if error_message %}
+                        <div id="error-message" class="alert alert-danger col-6 m-1" role="alert">
+                            {{ error_message }}
+                        </div>
+                        {% endif %}
+                    </div>
+                    <br>
+                    <div class="col-12 mt-2 text-center">
+                        <span id="spinner" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"
+                            style="display:none;"></span>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    function submitForm() {
+        // Deshabilitar el botón de "ANALIZAR"
+        document.getElementById("submitButton").disabled = true;
+
+        // Muestra el spinner
+        document.getElementById("spinner").style.display = "inline-block";
+
+        // Envía el formulario después de 3 segundos
+        setTimeout(function () {
+            document.getElementById("myForm").submit();
+        }, 500);
+    }
+
+    // Esta función se ejecutará cuando la página se cargue
+    document.addEventListener("DOMContentLoaded", function () {
+        // Obtener el elemento del mensaje de error
+        var errorMessageElement = document.getElementById("error-message");
+
+        // Verificar si el mensaje de error está presente
+        if (errorMessageElement) {
+            // Ocultar el mensaje de error después de 3000 milisegundos (3 segundos)
+            setTimeout(function () {
+                errorMessageElement.style.display = "none";
+            }, 3000);
+        }
+
+        // Añadir un manejador de eventos para el evento 'submit' del formulario
+        document.getElementById("myForm").addEventListener("submit", function (event) {
+            event.preventDefault(); // Prevenir el envío predeterminado del formulario
+            submitForm(); // Llamar a la función submitForm
+        });
+
+        // Añadir un manejador de eventos para la tecla 'Enter' en el campo de entrada
+        document.getElementById("url").addEventListener("keydown", function (event) {
+            if (event.key === 'Enter') {
+                event.preventDefault(); // Prevenir el envío predeterminado del formulario
+                submitForm(); // Llamar a la función submitForm
+            }
+        });
+    });
+</script>
+
+{% endblock %}

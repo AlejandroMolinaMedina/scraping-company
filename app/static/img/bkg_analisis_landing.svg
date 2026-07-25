@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1333.134" height="989.762" viewBox="0 0 1333.134 989.762">
+  <defs>
+    <linearGradient id="linear-gradient" x1="0.121" y1="0.79" x2="0.122" y2="0.79" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#dadada"/>
+      <stop offset="0.323" stop-color="#cdcdcd"/>
+      <stop offset="1" stop-color="#b8b8b8"/>
+    </linearGradient>
+    <clipPath id="clip-path">
+      <path id="Trazado_2567" data-name="Trazado 2567" d="M562.924,0C475.951.067,384.666,11.905,310.38,48.139,131.253,135.506,3.079,295.4.007,503.323,0,504.056,0,504.8,0,505.53v.573C.106,701.365,120.067,790.583,277.69,782.161c82.833-4.426,91.934-16.963,208.566-39.127,199.886-37.978,267.138,134.671,436.027,214.753,196.892,93.36,409.99-31.046,410.851-201.108v-2.091c-.229-45.526-15.671-94.247-50.674-142.9-32.758-45.538-86.521-91-132.137-126.716-121.8-95.358-112.971-194.791-133.561-265.874-24.325-83.979-55.44-145.4-152.648-179.273C848.653,34.433,713.151.129,564.553,0Z" fill="url(#linear-gradient)"/>
+    </clipPath>
+  </defs>
+  <g id="bkg_analisis_landing" opacity="0.707">
+    <g id="Grupo_1753" data-name="Grupo 1753" opacity="0.538" clip-path="url(#clip-path)">
+      <path id="Trazado_2568" data-name="Trazado 2568" d="M0,0,1675.924,80.83l81,1684.185L81,1684.185Z" transform="matrix(0.697, -0.717, 0.717, 0.697, -578.533, 541.061)" fill="url(#linear-gradient)"/>
+    </g>
+  </g>
+</svg>

@@ -1,0 +1,121 @@
+{% extends 'templateBase.html' %}
+
+{% block form %}
+
+<div class="row container">
+
+    <div class="col-12 text-start">
+        <h3>Reportes</h3>
+    </div>
+    {% if error_message %}
+    <div id="error-message" class="alert alert-danger col-10 row pt-2 pb-1 m-2 m-sm-2 h-auto" role="alert">
+        {{ error_message }}
+    </div>
+    {% endif %}
+    <div class="row col-12 d-flex justify-content-center align-content-center">
+        {% for report in reports %}
+        <div class="col-11 col-lg-5 fondoreporte row pt-2 pb-1 m-2 m-sm-2 h-auto">
+            <div class="col-5">
+                <h3 class="text-truncate">
+                    <a href="{{ url_for('VerInforme', id=report.id_Informe) }}" class="text-decoration-none iconCrud">{{
+                        report.nombre }}</a>
+                </h3>
+            </div>
+            <div class="col-5 ms-4 text-end">
+                <a href="#" class="delete-report iconCrud" data-bs-toggle="modal" data-bs-target="#deleteModal"
+                    data-id="{{report.id_Informe}}"><i class="bi-trash fs-sm iconCrud"></i></a>
+
+                <a href="{{url_for('obtenerReporte', id=report.id_Informe)}}" class="iconCrud"><i
+                        class="bi bi-file-earmark-arrow-down"></i></a>
+            </div>
+            <div class="col-9">
+                <p class="text-truncate">{{ report.url }}</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="pagination-container pt-4">
+        <ul class="pagination mb-0 flex-wrap">
+            {% if has_prev %}
+            <li class="page-item">
+                <a class="page-link " href="{{ url_for('verReportes', page=prev_num) }}" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+            {% endif %}
+            {% for p in range(1, total_pages + 1) %}
+            <li class="page-item {% if p == page %} active {% endif %} m-1">
+                <a class="page-link" href="{{ url_for('verReportes', page=p) }}">{{ p }}</a>
+            </li>
+            {% endfor %}
+            {% if has_next %}
+            <li class="page-item">
+                <a class="page-link" href="{{ url_for('verReportes', page=next_num) }}" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+            {% endif %}
+        </ul>
+    </div>
+</div>
+</div>
+
+
+
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <!-- Contenido del modal para eliminar comentario -->
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Eliminar informe</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Contenido del formulario del comentario -->
+                <form action="/eliminarInforme" method="post">
+                    <div class="form-floating">
+                        <input type="hidden" id="id" name="id" value="">
+                        <h3><strong>¿Seguro que deseas eliminar el informe?</strong></h3>
+                    </div>
+                    <br />
+                    <div class="modal-footer d-flex justify-content-center">
+                        <button type="button" class="btn btn-secondary buttonColor"
+                            data-bs-dismiss="modal">Cerrar</button>
+                        <button class="btn btn-danger buttonColor" type="submit">Eliminar informe</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script>
+    $(document).ready(function () {
+        // Manejador de eventos para cuando se abre el modal de eliminar
+        $('#deleteModal').on('show.bs.modal', function (event) {
+            // Extraer el data-id del botón que activó el modal
+            var button = $(event.relatedTarget);
+            var reportId = button.data('id');
+
+            // Actualizar el valor del input hidden en el modal de eliminar
+            $('#id').val(reportId);
+        });
+    });
+    // Esta función se ejecutará cuando la página se cargue
+    document.addEventListener("DOMContentLoaded", function () {
+        // Obtener el elemento del mensaje de error
+        var errorMessageElement = document.getElementById("error-message");
+
+        // Verificar si el mensaje de error está presente
+        if (errorMessageElement) {
+            // Ocultar el mensaje de error después de 3000 milisegundos (3 segundos)
+            setTimeout(function () {
+                errorMessageElement.style.display = "none";
+            }, 3000);
+        }
+    });
+</script>
+
+{% endblock %}

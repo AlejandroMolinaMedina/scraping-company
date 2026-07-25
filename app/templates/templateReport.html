@@ -1,0 +1,412 @@
+{% extends 'templateBase.html'%}
+
+{% block form %}
+
+<style>
+    #mensajeCopiado {
+        display: none;
+        position: fixed;
+        bottom: 10px;
+        left: 50%;
+        transform: translateX(-50%);
+        padding: 10px;
+        background-color: #979292;
+        color: white;
+        border-radius: 5px;
+        z-index: 999;
+    }
+</style>
+
+<div class="container mt-3">
+    <div class="row">
+        <div class="col-12 text-start">
+            <h1>Reporte de la página web de <strong>{{name_site}}</strong></h1>
+            <div id="mensajeCopiado">¡Enlace público copiado al portapapeles!</div>
+        </div>
+    </div>
+
+    <div class="row mt-2 fondoreporte w-auto h-75 py-3">
+        <div class="col-12 text-end">
+            <ul class="list-inline mb-0">
+                <li class="list-inline-item me-4">
+                    <!-- Botón de lápiz (editar comentario) -->
+                    <a class="delete-report iconCrud" data-bs-toggle="modal" data-bs-target="#deleteModalR"
+                        data-id="{{id_Informe}}"><i class="bi-trash fs-sm iconCrud"></i></a>
+                </li>
+                <li class="list-inline-item me-4">
+                    <!-- Botón de lápiz (editar comentario) -->
+                    <a href="{{url_for('obtenerReporte', id=id_Informe)}}"><i
+                            class="bi-box-arrow-in-down fs-sm iconCrud"></i></a>
+                </li>
+                <li class="list-inline-item me-4">
+                    <!-- Botón de lápiz (editar comentario) -->
+                    <a id="copiarAlPortapapeles" target="_blank" rel="noopener noreferrer">
+                        <i class="bi bi-clipboard2 fs-sm iconCrud"></i>
+                    </a>
+                </li>
+            </ul>
+            
+        </div>
+        <div class="col-lg-2 col-12 my-lg-0 my-2 tu-center-md">
+            <img src="./../static/img/imgReporte.png" alt="Resultados Analisis" class="img-fluid">
+        </div>
+        <div class="col-lg-10 col-12 my-lg-0 my-2 tu-center-md">
+            <div class="ms-md-5">
+                <p>Fecha: <strong>{{date}}</strong></p>
+                <p>URL: <strong><a class="link-dark" href="{{url}}" target="_blank">{{url}}</a> </strong></p>
+
+            </div>
+        </div>
+    </div>
+
+
+    <div class="fondometricas pb-3 w-auto h-75 ">
+        <div class="row mt-3 d-flex justify-content-center mt-2">
+            <div class="col-10 text-start mt-3">
+                <h2><i class="bi bi-activity"></i> <strong> Métricas de rendimiento</strong></h2>
+            </div>
+            <div class="mt-3 col-8">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th scope="col">Nombre</th>
+                            <th scope="col">Valor</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for metric, values in metrics.items() %}
+                        <tr>
+                            <td>{{metric}}</td>
+                            <td>{{values[0]}}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <div>
+                    <p><strong>Host: </strong>{{hosting_provider}}&nbsp;</p>
+                </div>
+            </div>
+            <div class="col-10 text-start">
+                <h2><i class="bi bi-heart-pulse"></i> <strong> Diagnóstico</strong></h2>
+            </div>
+            
+            <div class="mt-3 col-8 row d-flex justify-content-center">
+                {% for diagnostico, values in diagnosticos.items() %}
+                    {% if values.0 is none %}
+                        {# Haz algo específico para el caso de None si es necesario #}
+                    {% else %}
+                        {% set color = "rgb(0, 204, 102)" %}
+                        {% if values.0 < 50 %}
+                            {% set color = "rgb(255,51,51)" %}
+                        {% elif values.0 < 90 %}
+                            {% set color = "rgb(255,170,51)" %}
+                        {% endif %}
+                                
+                        {% set int_value = values.0 | int %}
+                        <div class="col-12 col-md-6 col-xl-3">
+                            <div class="porcentaje align-items-center justify-content-center d-flex" style="--porcentaje: {{ values.0 }}px; --color: {{ color }}">
+                                <svg width="150" height="150">
+                                    <circle r="65" cx="50%" cy="50%" pathlength="100"/>
+                                    <circle r="65" cx="50%" cy="50%" pathlength="100"/>
+                                </svg>
+                                <span>{{ int_value }} %</span>
+                            </div>
+                            <div class="align-items-center justify-content-center d-flex pt-2">
+                                <h6>{{ diagnostico }}</h6>
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+            
+            
+            
+            <div class="col-10 text-start pt-2">
+                <h2><i class="bi bi-tools"></i><strong> Herramientas utilizadas</strong></h2>
+            </div>
+            <div class="mt-3 col-8">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th scope="col">Nombre</th>
+                                <th scope="col">Versión</th>
+                                <th scope="col">Categoría</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for technology in technology_info %}
+                            <tr>
+                                <td>{{ technology[0] }}</td>
+                                {% if technology[1] %}
+                                <td>{{ technology[1] }}</td>
+                                {% else %}
+                                <td>No se encontró la versión</td>
+                                {% endif %}
+                                <td>{{ ', '.join(technology[2]) }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        
+        <div class="row d-flex justify-content-center">
+            <div class="col-12 row d-flex justify-content-center">
+                <!-- Verificar si hay comentarios -->
+                {% if comments %}
+                {% for comment in comments %}
+                <div class="col-12 justify-content-center d-flex">
+                    <p>{{comment[1]}}</p>
+                </div>
+                <div class="col-12 d-flex justify-content-center mb-2">
+                    <ul class="list-inline mb-0">
+                        <li class="list-inline-item me-4">
+                            <!-- Botón de lápiz (editar comentario) -->
+                            <a href="#editModal" data-bs-toggle="modal" data-bs-target="#editModal"
+                                data-id="{{comment[0]}}"><i class="bi-pencil fs-s iconCrud"></i></a>
+                        </li>
+                        <li class="list-inline-item me-4">
+                            <!-- Botón de lápiz (eliminar comentario) -->
+                            <a href="#deleteModal" data-bs-toggle="modal" data-bs-target="#deleteModal"
+                                data-id="{{comment[0]}}"><i class="bi-trash fs-sm iconCrud"></i></a>
+                        </li>
+                    </ul>
+                </div>
+                {% endfor %}
+                {% endif %}
+                <div class="row align-items-center justify-content-center d-flex col-12">
+                    <div class="col-12 col-md-6 my-1 align-items-center justify-content-center d-flex">
+                        <a href="#!" data-bs-toggle="modal" data-bs-target="#exampleModal"
+                            class="btn btn-primary buttonColor">Comentario <i class="bi-plus-circle fs-s"></i></a>
+                    </div>
+                    <div class="col-12 col-md-6 my-1 align-items-center justify-content-center d-flex">
+                        <a href="{{url_for('obtenerReporte', id=id_Informe)}}"
+                            class="btn btn-primary buttonColor">Obtener Reporte</a>
+                    </div>
+
+
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+
+    <!-- Modal para agregar comentario -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Añadir Comentario</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Contenido del formulario del comentario -->
+                    <form action="/agregarComentario" method="post" class="form-validate">
+                        <div class="form-floating">
+                            <textarea class="form-control" placeholder="Leave a comment here" id="comentario"
+                                name="comentario"></textarea>
+                            <label for="floatingTextarea">Comentarios</label>
+                            <input type="hidden" id="addId" name="id" value={{id_Informe}}>
+                        </div>
+                        <br />
+                        <div class="modal-footer d-flex justify-content-center">
+                            <button type="button" class="btn btn-secondary buttonColor"
+                                data-bs-dismiss="modal">Cerrar</button>
+                            <button class="btn btn-primary buttonColor" type="submit">Agregar comentario</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para editar comentario -->
+    <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+        <!-- Contenido del modal para editar comentario -->
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Editar Comentario</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Contenido del formulario del comentario -->
+                    <form action="/editarComentario" method="post" class="form-validate">
+                        <div class="form-floating">
+                            <textarea class="form-control" placeholder="Leave a comment here" id="editComentario"
+                                name="editComentario"></textarea>
+                            <label for="floatingTextarea">Comentarios</label>
+                            <input type="hidden" id="editId" name="id" value="">
+                        </div>
+                        <br />
+                        <div class="modal-footer d-flex justify-content-center">
+                            <button type="button" class="btn btn-secondary buttonColor"
+                                data-bs-dismiss="modal">Cerrar</button>
+                            <button class="btn btn-primary buttonColor" type="submit">Guardar cambios</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para eliminar comentario -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <!-- Contenido del modal para eliminar comentario -->
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Eliminar Comentario</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Contenido del formulario del comentario -->
+                    <form action="/eliminarComentario" method="post">
+                        <div class="form-floating">
+                            <input type="hidden" id="deleteId" name="id" value="">
+                            <h3><strong>¿Seguro que deseas eliminar el comentario?</strong></h3>
+                        </div>
+                        <br />
+                        <div class="modal-footer d-flex justify-content-center">
+                            <button type="button" class="btn btn-secondary buttonColor"
+                                data-bs-dismiss="modal">Cerrar</button>
+                            <button class="btn btn-danger buttonColor" type="submit">Eliminar comentario</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="modal fade" id="deleteModalR" tabindex="-1" aria-labelledby="deleteModalLabelR" aria-hidden="true">
+        <!-- Contenido del modal para eliminar comentario -->
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Eliminar informe</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Contenido del formulario del comentario -->
+                    <form action="/eliminarInforme" method="post">
+                        <div class="form-floating">
+                            <input type="hidden" id="id" name="id" value="">
+                            <h3><strong>¿Seguro que deseas eliminar el informe?</strong></h3>
+                        </div>
+                        <br />
+                        <div class="modal-footer d-flex justify-content-center">
+                            <button type="button" class="btn btn-secondary buttonColor"
+                                data-bs-dismiss="modal">Cerrar</button>
+                            <button class="btn btn-danger buttonColor" type="submit">Eliminar informe</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            // Manejador de eventos para cuando se abre el modal de editar
+            $('#editModal').on('show.bs.modal', function (event) {
+                // Extraer el data-id del botón que activó el modal
+                var button = $(event.relatedTarget);
+                var commentId = button.data('id');
+
+                // Actualizar el valor del input hidden en el modal de editar
+                $('#editId').val(commentId);
+            });
+
+            // Manejador de eventos para cuando se abre el modal de eliminar
+            $('#deleteModal').on('show.bs.modal', function (event) {
+                // Extraer el data-id del botón que activó el modal
+                var button = $(event.relatedTarget);
+                var commentId = button.data('id');
+
+                // Actualizar el valor del input hidden en el modal de eliminar
+                $('#deleteId').val(commentId);
+            });
+        });
+    </script>
+    <script>
+        $(document).ready(function () {
+            // Manejador de eventos para cuando se abre el modal de eliminar
+            $('#deleteModalR').on('show.bs.modal', function (event) {
+                // Extraer el data-id del botón que activó el modal
+                var button = $(event.relatedTarget);
+                var reportId = button.data('id');
+
+                // Actualizar el valor del input hidden en el modal de eliminar
+                $('#id').val(reportId);
+            });
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var forms = document.querySelectorAll('.form-validate');
+
+            forms.forEach(function (form) {
+                form.addEventListener('submit', function (event) {
+                    // Obtener todos los campos de texto en el formulario
+                    var textFields = form.querySelectorAll('textarea');
+
+                    // Bandera para verificar si todos los campos tienen datos
+                    var allFieldsHaveData = true;
+
+                    // Verificar si todos los campos de texto tienen datos
+                    textFields.forEach(function (textField) {
+                        if (textField.value.trim() === '') {
+                            allFieldsHaveData = false;
+                        }
+                    });
+
+                    // Si algún campo no tiene datos, evitar que el formulario se envíe
+                    if (!allFieldsHaveData) {
+                        event.preventDefault();
+                        alert('Ingresa un comentario');
+                    }
+                });
+            });
+        });
+    </script>
+
+<script>
+    document.getElementById('copiarAlPortapapeles').addEventListener('click', function () {
+        // Texto que deseas copiar al portapapeles
+        var textoACopiar = "{{enlace_publico}}";
+
+        // Crear un elemento de textarea fuera del área visible de la página
+        var textarea = document.createElement('textarea');
+        textarea.value = textoACopiar;
+        document.body.appendChild(textarea);
+
+        // Seleccionar y copiar el texto al portapapeles
+        textarea.select();
+        document.execCommand('copy');
+
+        // Eliminar el elemento textarea creado
+        document.body.removeChild(textarea);
+
+        // Mostrar el mensaje de copiado
+        var mensajeCopiado = document.getElementById('mensajeCopiado');
+        mensajeCopiado.style.display = 'block';
+
+        // Desaparecer el mensaje después de 2 segundos
+        setTimeout(function () {
+            mensajeCopiado.style.display = 'none';
+
+            // Abrir la nueva ventana después de 2 segundos
+            window.open("{{enlace_publico}}", '_blank', 'noopener,noreferrer');
+        }, 1500);
+    });
+</script>
+</div>
+{% endblock %}
