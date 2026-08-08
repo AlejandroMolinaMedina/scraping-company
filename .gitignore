@@ -19,6 +19,6 @@ migrations
 
 # Ignorar archivos específicos
 .env
-
+*.pdf
 /flask_session/
 Pipfile
