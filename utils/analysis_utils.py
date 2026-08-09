@@ -16,7 +16,6 @@ import requests
 import dotenv
 
 def get_first_contentful_paint(url):
-    #"AIzaSyAL67F5ZAG1eCWeoG5hAOwf2CYO_EfumAE"
     api_key = os.environ.get('PAGESPEED_APIKEY')
     api_url = f"https://pagespeedonline.googleapis.com/pagespeedonline/v5/runPagespeed?url={url}&category=SEO&category=ACCESSIBILITY&category=BEST_PRACTICES&category=PERFORMANCE&strategy=DESKTOP&key={api_key}"
     response = requests.get(api_url)
