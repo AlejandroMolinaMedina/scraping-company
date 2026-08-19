@@ -179,7 +179,7 @@ def get_technology_info_formatted2 (urlp):
 
     headers = {
 	"content-type": "application/json",
-	"X-RapidAPI-Key": f"{os.environ.get('X-RAPIDAPI-KEY')}",
+	"X-RapidAPI-Key": f"{os.environ.get('X_RAPIDAPI_KEY')}",
 	"X-RapidAPI-Host": "website-technology-lookup-api.p.rapidapi.com"
     }
 

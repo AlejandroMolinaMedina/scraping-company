@@ -22,3 +22,5 @@ migrations
 *.pdf
 /flask_session/
 Pipfile
+.secrets
+*.yml

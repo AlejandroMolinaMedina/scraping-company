@@ -1,6 +1,0 @@
-postgres:
-  image: scraping_company:latest
-  container_name: scraping_company
-  ports:
-    - "5000:5000"
-  
