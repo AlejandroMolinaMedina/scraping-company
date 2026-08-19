@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  app:
+    image: ghcr.io/alejandromolinamedina/scraping-company:latest
+    container_name: scraping_company
+    ports:
+      - "5000:5000"
+    environment:
+      - APP_NAME=Analisis
+      - WHO_HOST_ADN_WHATCMS_APIKEY=
+      - X_RAPIDAPI_KEY=
+      - PAGESPEED_APIKEY=
+      - SECRET_KEY=
+      - EMAIL_PASSWORD=
+      - MAIL_PORT=
+      - MAIL_USERNAME=
+      - MAIL_DEFAULT_SENDER=
+      - MAIL_SERVER=
+      - PYTHONPATH=/app:/app/app/utils
+      - DB_USER=
+      - DB_PASSWORD=
+      - DB_HOST=db
+      - DB_NAME=
+    depends_on:
+      - db
+
+  db:
+    image: postgres:15
+    container_name: scraping_db
+    environment:
+      - POSTGRES_USER=
+      - POSTGRES_PASSWORD=
+      - POSTGRES_DB=
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
+
