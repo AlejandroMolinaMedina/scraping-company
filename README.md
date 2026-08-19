@@ -66,10 +66,10 @@ Este proyecto es una aplicación web robusta diseñada para la gestión de usuar
 
 La aplicación depende de los siguientes servicios externos para realizar sus funciones de análisis:
 
-- **Google PageSpeed Insights API:** Utilizada para obtener métricas de rendimiento, SEO, accesibilidad y mejores prácticas.
-- **WhatCMS API:** Utilizada para identificar el CMS y las tecnologías base de los sitios web analizados.
-- **WhoHostsThis API:** Utilizada para identificar el proveedor de hosting de los sitios web.
-- **Website Technology Lookup API (vía RapidAPI):** Utilizada como alternativa para la detección de tecnologías web.
+- **[Google PageSpeed Insights API](https://developers.google.com/speed/docs/insights/v5/get-started):** Utilizada para obtener métricas de rendimiento, SEO, accesibilidad y mejores prácticas.
+- **[WhatCMS API](https://whatcms.org/API):** Utilizada para identificar el CMS y las tecnologías base de los sitios web analizados.
+- **[WhoHostsThis API](https://www.who-hosts-this.com/API):** Utilizada para identificar el proveedor de hosting de los sitios web.
+- **[Website Technology Lookup API](https://rapidapi.com/santiagomontes7/api/website-technology-lookup-api/) (vía RapidAPI):** Utilizada como alternativa para la detección de tecnologías web.
 - **Servicio SMTP (Flask-Mail):** Utilizado para el envío de correos electrónicos transaccionales (verificación de cuentas).
 
 Para el correcto funcionamiento de estas características, asegúrese de configurar las variables de entorno necesarias (claves de API, credenciales de correo) tal como se indica en la configuración del proyecto.
