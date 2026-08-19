@@ -1,5 +1,6 @@
 import os
 
+# Comentario para activar GitHub Action
 # Clase config para hacer la conexión con la BD
 class Config:
     SECRET_KEY = os.environ.get('SECRET_KEY') 
